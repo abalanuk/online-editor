@@ -3,13 +3,13 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Dialog from 'react-bootstrap-dialog'
 
-import {fetchData} from '../../store/article/actions';
+import {fetchData, saveArticle} from '../../store/article/actions';
 import {setSelectedWord} from '../../store/selected/actions'
 import {setActions} from '../../store/actions/actions'
 import Button from '../button/Button';
 import SynonymModalContent from '../modal/SynonymModal';
-import {Actions, stylesMapToAction} from '../../config/constants'
 
+import {Actions, stylesMapToAction, stylesMapToValue} from '../../config/constants'
 import './EditorView.css';
 
 class EditorForm extends Component {
@@ -19,6 +19,9 @@ class EditorForm extends Component {
         this._doubleClickHandler = this._doubleClickHandler.bind(this);
         this._renderArticle = this._renderArticle.bind(this);
         this._handleSaveArticle = this._handleSaveArticle.bind(this);
+
+        this._getNodeStyles = this._getNodeStyles.bind(this);
+        this._getArticleRef = ref => this.articleRef = ref;
 
         this.selectedWordRef = null;
     }
@@ -43,59 +46,104 @@ class EditorForm extends Component {
         }
     }
 
+    _getWordsWithStyles() {
+        let wordsWithStyles = []
+        this.articleRef.childNodes.forEach(node => {
+            if(node.innerText === ' '){
+                wordsWithStyles.push(node.innerText);
+                return
+            }
+
+            const styleKeys = Object.values(stylesMapToAction);
+            const nodeStyles = styleKeys.reduce((acc, value) => {
+                if(node.style[value]){
+                    return [...acc, value];
+                }
+
+                return acc
+            }, []);
+
+            wordsWithStyles.push({[node.innerText]: nodeStyles});
+        });
+
+        return wordsWithStyles
+    }
+
     _handleSaveArticle(event) {
         event.preventDefault();
         event.stopPropagation();
+
+        const wordsWithStyles = this._getWordsWithStyles();
+
+        this.props.saveArticle(wordsWithStyles)
+    }
+
+    _getNodeStyles(stylesProps) {
+        return stylesProps.reduce((acc, prop) => {
+            acc[prop] = stylesMapToValue[prop];
+
+            return acc
+        }, {});
     }
 
     _doubleClickHandler(event) {
         event.preventDefault();
         event.stopPropagation();
 
-        //show synonyms dialog
-        const dialogContent = <SynonymModalContent/>;
-
-        this.dialog.show({
-            title: 'Synonyms',
-            body: dialogContent,
-            prompt: Dialog.TextPrompt(),
-            actions: [
-                Dialog.OKAction(),
-                Dialog.Action(
-                    <span>Cancel</span>,
-                    () => {},
-                    'btn-success'
-                )
-            ],
-            onHide: dialog => dialog.hide()
-        })
-
         this.selectedWordRef = event.target;
 
+        //show synonyms dialog
+        const dialogContent = <SynonymModalContent/>;
+        // this.dialog.show({
+        //     title: 'Synonyms',
+        //     body: dialogContent,
+        //     bsSize: 'small',
+        //     actions: [
+        //         Dialog.OKAction(),
+        //         Dialog.CancelAction()
+        //     ],
+        //     onHide: dialog => dialog.hide()
+        // })
+
         this.props.setActions(event.target);
-        this.props.setSelectedWord(event.target.innerText);
+        this.props.setSelectedWord(event.target);
     }
 
     _renderArticle() {
         const {article} = this.props
-        const wordArray = article.split(' ');
-
+        const wordArray = !Array.isArray(article) ? article.split(' ') : article;
         return wordArray.map((word, index) => {
+            if(typeof word === 'object') {
+                //['fontWeight', 'textDecoration', ...]
+                const stylesProps = Object.values(word)[0];
+                //{'fontWeight': 'bold', ...}
+                const styles = stylesProps.length ? this._getNodeStyles(stylesProps) : {};
+                return (
+                    <span
+                        key={index}
+                        style={styles}
+                        onDoubleClick={this._doubleClickHandler}
+                    >
+                        {`${Object.keys(word)[0]} `}
+                    </span>
+                )
+            }
+
             return (
-                <span key={index}>
+                <span key={index} onDoubleClick={this._doubleClickHandler}>
                     {`${word} `}
                 </span>
             )
         })
-
     }
+
     render() {
         return (
             <div className="EditorContainer">
                 <section
                     className="TextArea"
                     onDoubleClick={this._doubleClickHandler}
-
+                    ref={this._getArticleRef}
                 >
                     {this._renderArticle()}
                 </section>
@@ -106,7 +154,7 @@ class EditorForm extends Component {
                     disabled={false}
                 />
                 <section className="Synonyms">
-                    <Dialog ref={ el => { this.dialog = el }}/>
+                    {false && <Dialog ref={ (el) => { this.dialog = el }}/>}
                 </section>
             </div>
         );
@@ -129,7 +177,8 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchData: () => dispatch(fetchData()),
         setSelectedWord: (wordNode) => dispatch(setSelectedWord(wordNode)),
-        setActions: (selectedNode) => dispatch(setActions(selectedNode))
+        setActions: (selectedNode) => dispatch(setActions(selectedNode)),
+        saveArticle: (articleNode) => dispatch(saveArticle(articleNode))
     }
 }
 

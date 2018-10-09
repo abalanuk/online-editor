@@ -5,3 +5,9 @@ export const stylesMapToAction = {
     'italic': 'fontStyle',
     'underline': 'textDecoration'
 };
+
+export const stylesMapToValue = {
+    'fontWeight': 'bold',
+    'fontStyle': 'italic',
+    'textDecoration': 'underline'
+};
