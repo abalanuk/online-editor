@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import Dialog from 'react-bootstrap-dialog'
 
 import {fetchData} from '../../store/article/actions';
 import {setSelectedWord} from '../../store/selected/actions'
@@ -42,6 +43,18 @@ class EditorForm extends Component {
         event.preventDefault();
         event.stopPropagation();
 
+        //show synonyms dialog
+        this.dialog.show({
+            title: 'Synonyms',
+            body: "Body",
+            actions: [
+                Dialog.CancelAction(),
+                Dialog.OKAction()
+            ],
+            bsSize: 'small',
+            onHide: dialog => dialog.hide()
+        })
+
         this.selectedWordRef = event.target;
         this.props.setSelectedWord(event.target.innerText);
     }
@@ -62,12 +75,15 @@ class EditorForm extends Component {
     render() {
         return (
             <div className="EditorContainer">
-                <div
+                <section
                     className="TextArea"
                     onDoubleClick={this._doubleClickHandler}
                 >
                     {this._renderArticle()}
-                </div>
+                </section>
+                <section className="Synonyms">
+                    <Dialog ref={(el) => { this.dialog = el }}/>
+                </section>
             </div>
         );
     }
