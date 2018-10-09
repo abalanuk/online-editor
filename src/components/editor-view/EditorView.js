@@ -11,25 +11,45 @@ class EditorForm extends Component {
     }
 
     componentDidMount() {
+        this.props.fetchData();
     }
 
     render() {
+        const wordArray = this.props.article.split(' ');
         return (
             <div className="EditorContainer">
-                Here will be Editor
+                <div
+                    className="TextArea"
+                >
+                    {
+                        wordArray.map((word, index) => {
+                            return (
+                                <span key={index}>
+                                    {`${word} `}
+                                </span>
+                            )
+                        })
+                    }
+                </div>
             </div>
         );
     }
 }
 
-EditorForm.propTypes = {};
+EditorForm.propTypes = {
+    fetchData: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
-    return {}
+    return {
+        article: state.article
+    }
 }
 
 function mapDispatchToProps(dispatch) {
-    return {}
+    return {
+        fetchData: () => dispatch(fetchData())
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditorForm);
