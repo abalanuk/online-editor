@@ -7,6 +7,7 @@ import {fetchData} from '../../store/article/actions';
 import {setSelectedWord} from '../../store/selected/actions'
 import {setActions} from '../../store/actions/actions'
 import Button from '../button/Button';
+import SynonymModalContent from '../modal/SynonymModal';
 import {Actions, stylesMapToAction} from '../../config/constants'
 
 import './EditorView.css';
@@ -17,6 +18,7 @@ class EditorForm extends Component {
 
         this._doubleClickHandler = this._doubleClickHandler.bind(this);
         this._renderArticle = this._renderArticle.bind(this);
+        this._handleSaveArticle = this._handleSaveArticle.bind(this);
 
         this.selectedWordRef = null;
     }
@@ -41,19 +43,30 @@ class EditorForm extends Component {
         }
     }
 
+    _handleSaveArticle(event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     _doubleClickHandler(event) {
         event.preventDefault();
         event.stopPropagation();
 
         //show synonyms dialog
+        const dialogContent = <SynonymModalContent/>;
+
         this.dialog.show({
             title: 'Synonyms',
-            body: "Body",
+            body: dialogContent,
+            prompt: Dialog.TextPrompt(),
             actions: [
-                Dialog.CancelAction(),
-                Dialog.OKAction()
+                Dialog.OKAction(),
+                Dialog.Action(
+                    <span>Cancel</span>,
+                    () => {},
+                    'btn-success'
+                )
             ],
-            bsSize: 'small',
             onHide: dialog => dialog.hide()
         })
 
@@ -82,17 +95,18 @@ class EditorForm extends Component {
                 <section
                     className="TextArea"
                     onDoubleClick={this._doubleClickHandler}
+
                 >
                     {this._renderArticle()}
                 </section>
                 <Button
                     title="Save"
-                    onClick={() => {}}
+                    onClick={this._handleSaveArticle}
                     name='save'
                     disabled={false}
                 />
                 <section className="Synonyms">
-                    <Dialog ref={(el) => { this.dialog = el }}/>
+                    <Dialog ref={ el => { this.dialog = el }}/>
                 </section>
             </div>
         );
