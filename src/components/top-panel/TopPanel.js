@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {Actions} from '../../config/constants'
+import {updateActions} from '../../store/actions/actions';
 import Button from '../button/Button'
 
 import './TopPanel.css';
@@ -16,10 +17,11 @@ class TopPanel extends Component {
     _handleAction(event) {
         event.preventDefault();
         event.stopPropagation();
-        console.log(event.target);
+        this.props.updateActions(event.target.name);
     }
 
     render() {
+        console.log(this.props.actions);
         return (
             <div className="TopPanel">
                 {Actions.map(action => {
@@ -28,6 +30,7 @@ class TopPanel extends Component {
                             key={action}
                             title={action}
                             name={action}
+                            disabled={!this.props.selectedWord}
                             onClick={this._handleAction}
                         />
                     )
@@ -38,11 +41,16 @@ class TopPanel extends Component {
 }
 
 function mapStateToProps(state) {
-    return {}
+    return {
+        selectedWord: state.selected,
+        actions: state.actions
+    }
 }
 
 function mapDispatchToProps(dispatch) {
-    return {};
+    return {
+        updateActions: action => dispatch(updateActions(action))
+    };
 }
 
 export default connect(
