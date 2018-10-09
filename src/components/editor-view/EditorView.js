@@ -6,6 +6,7 @@ import Dialog from 'react-bootstrap-dialog'
 import {fetchData} from '../../store/article/actions';
 import {setSelectedWord} from '../../store/selected/actions'
 import {setActions} from '../../store/actions/actions'
+import Button from '../button/Button';
 import {Actions, stylesMapToAction} from '../../config/constants'
 
 import './EditorView.css';
@@ -84,6 +85,12 @@ class EditorForm extends Component {
                 >
                     {this._renderArticle()}
                 </section>
+                <Button
+                    title="Save"
+                    onClick={() => {}}
+                    name='save'
+                    disabled={false}
+                />
                 <section className="Synonyms">
                     <Dialog ref={(el) => { this.dialog = el }}/>
                 </section>
