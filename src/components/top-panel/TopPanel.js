@@ -12,6 +12,7 @@ class TopPanel extends Component {
         super(props, context);
 
         this._handleAction = this._handleAction.bind(this);
+        this._getSelectedState = this._getSelectedState.bind(this);
     }
 
     _handleAction(event) {
@@ -19,6 +20,10 @@ class TopPanel extends Component {
         event.stopPropagation();
 
         this.props.updateActions(event.target.name);
+    }
+
+    _getSelectedState(action) {
+        return this.props.actions.includes(action)
     }
 
     render() {
@@ -31,6 +36,7 @@ class TopPanel extends Component {
                             title={action}
                             name={action}
                             disabled={!this.props.selectedWord}
+                            selected={this._getSelectedState(action)}
                             onClick={this._handleAction}
                         />
                     )

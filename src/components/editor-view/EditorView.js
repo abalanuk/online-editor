@@ -5,6 +5,7 @@ import Dialog from 'react-bootstrap-dialog'
 
 import {fetchData} from '../../store/article/actions';
 import {setSelectedWord} from '../../store/selected/actions'
+import {setActions} from '../../store/actions/actions'
 import {Actions, stylesMapToAction} from '../../config/constants'
 
 import './EditorView.css';
@@ -56,6 +57,8 @@ class EditorForm extends Component {
         })
 
         this.selectedWordRef = event.target;
+
+        this.props.setActions(event.target);
         this.props.setSelectedWord(event.target.innerText);
     }
 
@@ -96,16 +99,16 @@ EditorForm.propTypes = {
 };
 
 function mapStateToProps(state) {
-    return {
-        article: state.article,
-        actions: state.actions
-    }
+    const {article, actions} = state;
+
+    return {article, actions}
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         fetchData: () => dispatch(fetchData()),
         setSelectedWord: (wordNode) => dispatch(setSelectedWord(wordNode)),
+        setActions: (selectedNode) => dispatch(setActions(selectedNode))
     }
 }
 
