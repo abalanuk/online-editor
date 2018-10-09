@@ -17,11 +17,11 @@ class TopPanel extends Component {
     _handleAction(event) {
         event.preventDefault();
         event.stopPropagation();
+
         this.props.updateActions(event.target.name);
     }
 
     render() {
-        console.log(this.props.actions);
         return (
             <div className="TopPanel">
                 {Actions.map(action => {
