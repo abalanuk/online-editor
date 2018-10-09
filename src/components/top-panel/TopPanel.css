@@ -1,0 +1,7 @@
+.TopPanel {
+    height: 5vh;
+    padding: 3vh;
+    background-color: saddlebrown;
+    display: flex;
+    justify-content: center;
+}
