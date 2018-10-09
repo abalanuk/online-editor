@@ -1,25 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {Provider} from 'react-redux';
 import './App.css';
-import ControlPanel from "./control-panel/ControlPanel";
-import FileZone from "./file-zone/FileZone";
-import getMockText from './text.service';
 
 class App extends Component {
-    getText() {
-        getMockText().then(function (result) {
-            console.log(result);
-        });
-    }
     render() {
         return (
             <div className="App">
-                <header>
-                    <span>Simple Text Editor</span>
+                <header className="App-header">
+                    Web Text Editor
                 </header>
-                <main>
-                    <ControlPanel/>
-                    <FileZone/>
-                </main>
+                Here should be Web Editor
             </div>
         );
     }
