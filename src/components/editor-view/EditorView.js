@@ -138,6 +138,7 @@ class EditorForm extends Component {
     }
 
     render() {
+        //Todo: add feedback on saving article success
         return (
             <div className="EditorContainer">
                 <section
