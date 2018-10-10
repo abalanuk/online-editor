@@ -1,24 +1,37 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Dialog from 'react-bootstrap-dialog'
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import {fetchData, saveArticle} from '../../store/article/actions';
-import {setSelectedWord} from '../../store/selected/actions'
+import {setSelectedWord, replaceSelectedWord} from '../../store/selected/actions'
 import {setActions} from '../../store/actions/actions'
 import Button from '../button/Button';
-import SynonymModalContent from '../modal/SynonymModal';
+import SynonymModal from '../modal/SynonymModal';
 
 import {Actions, stylesMapToAction, stylesMapToValue} from '../../config/constants'
 import './EditorView.css';
 
-class EditorForm extends Component {
+const modalStyles = {
+    synonymsContent: {
+        top: '70%',
+        width: '60%',
+    }
+}
+
+class EditorView extends Component {
     constructor(props, context) {
         super(props, context);
+
+        this.state = {
+            modalIsOpen: false
+        }
 
         this._doubleClickHandler = this._doubleClickHandler.bind(this);
         this._renderArticle = this._renderArticle.bind(this);
         this._handleSaveArticle = this._handleSaveArticle.bind(this);
+        this._handleCloseDialog = this._handleCloseDialog.bind(this);
 
         this._getNodeStyles = this._getNodeStyles.bind(this);
         this._getArticleRef = ref => this.articleRef = ref;
@@ -43,6 +56,11 @@ class EditorForm extends Component {
             for(let action of absentActions) {
                 style[stylesMapToAction[action]] = '';
             }
+        }
+
+        const {selected} = this.props
+        if(selected && nextProps.selected.innerText !== selected.innerText) {
+            this.selectedWordRef.innerText = `${nextProps.selected.innerText} `;
         }
     }
 
@@ -93,20 +111,15 @@ class EditorForm extends Component {
         this.selectedWordRef = event.target;
 
         //show synonyms dialog
-        const dialogContent = <SynonymModalContent/>;
-        // this.dialog.show({
-        //     title: 'Synonyms',
-        //     body: dialogContent,
-        //     bsSize: 'small',
-        //     actions: [
-        //         Dialog.OKAction(),
-        //         Dialog.CancelAction()
-        //     ],
-        //     onHide: dialog => dialog.hide()
-        // })
+        this.setState({modalIsOpen: true});
 
         this.props.setActions(event.target);
         this.props.setSelectedWord(event.target);
+    }
+
+    _handleCloseDialog(value) {
+        this.setState({modalIsOpen: false});
+        this.props.replaceSelectedWord(value);
     }
 
     _renderArticle() {
@@ -154,24 +167,28 @@ class EditorForm extends Component {
                     name='save'
                     disabled={false}
                 />
-                <section className="Synonyms">
-                    {false && <Dialog ref={ (el) => { this.dialog = el }}/>}
-                </section>
+                <Dialog
+                    contentStyle={modalStyles.synonymsContent}
+                    open={this.state.modalIsOpen}
+                >
+                    <DialogTitle>Synonyms</DialogTitle>
+                    <SynonymModal onClose={this._handleCloseDialog}/>
+                </Dialog>
             </div>
         );
     }
 }
 
-EditorForm.propTypes = {
+EditorView.propTypes = {
     fetchData: PropTypes.func.isRequired,
     article: PropTypes.string.isRequired,
     actions: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
-    const {article, actions} = state;
+    const {article, actions, selected} = state;
 
-    return {article, actions}
+    return {article, actions, selected}
 }
 
 function mapDispatchToProps(dispatch) {
@@ -179,10 +196,11 @@ function mapDispatchToProps(dispatch) {
         fetchData: () => dispatch(fetchData()),
         setSelectedWord: (wordNode) => dispatch(setSelectedWord(wordNode)),
         setActions: (selectedNode) => dispatch(setActions(selectedNode)),
-        saveArticle: (articleNode) => dispatch(saveArticle(articleNode))
+        saveArticle: (articleNode) => dispatch(saveArticle(articleNode)),
+        replaceSelectedWord: (word) => dispatch(replaceSelectedWord(word))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorForm);
+export default connect(mapStateToProps, mapDispatchToProps)(EditorView);
 
 

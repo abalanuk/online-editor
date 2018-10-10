@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import {getSynonyms} from '../../store/synonyms/actions';
 import './SynonymModal.css'
 
@@ -14,57 +18,54 @@ class SynonymModal extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        debugger
         const {selectedWord} = this.props
 
         if(nextProps.selectedWord.innerText !== selectedWord.innerText) {
             const clearWord = nextProps.selectedWord.innerText.replace(/[,.\s]+/g, '');
-            console.log(clearWord.toLowerCase());
             this.props.getSynonyms(clearWord.toLowerCase());
         }
     }
 
 
     componentDidMount() {
-        const word = this.props.selectedWord.innerText
-        const clearWord = word.replace(/[,.\s]+/g, '');
-        console.log(clearWord.toLowerCase());
+        const clearWord = this.props.selectedWord.innerText.replace(/[,.\s]+/g, '');
         this.props.getSynonyms(clearWord.toLowerCase());
     }
 
-    _handleSynonymSelection(event) {
+    _handleSynonymSelection(value, event) {
         event.preventDefault();
         event.stopPropagation();
+
+        this.props.onClose(value);
     }
 
     _getContent() {
         const {synonyms} = this.props
 
         return synonyms.length ?
-            this.props.synonyms.map((syn,index) => {
+            this.props.synonyms.map(syn => {
                 return (
-                    <p
-                        className="Synonym"
-                        key={`syn-${index}`}
-                        onClick={this._handleSynonymSelection}
-                    >
-                        {syn.word}
-                    </p>
+                    <ListItem button onClick={this._handleSynonymSelection.bind(this, syn.word)} key={syn.word}>
+                        <ListItemText primary={syn.word} />
+                    </ListItem>
                 )
             }) :
-            'There is no synonyms'
+            'There is no synonyms for such word'
     }
 
     render() {
         return (
             <div className="ModalContainer">
-                {this._getContent()}
+                <List>
+                    {this._getContent()}
+                </List>
             </div>
         );
     }
 }
 
 SynonymModal.propTypes = {
+    synonyms: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {

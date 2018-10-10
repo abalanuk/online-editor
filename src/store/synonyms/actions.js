@@ -5,8 +5,6 @@ export function getSynonyms(word) {
         const response = await fetch(`https://api.datamuse.com/words?rel_syn=${word}`);
         const data = await response.json();
 
-        console.log(data);
-
         dispatch({type: SET_SYNONYMS, synonyms: data});
     }
 }

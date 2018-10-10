@@ -1,13 +1,3 @@
 .ModalContainer {
-    border: 1px solid saddlebrown;
-    height: 50px;
     overflow: scroll;
-}
-
-.Synonyms {
-    width: 50%;
-}
-
-.Synonym {
-    cursor: pointer;
 }
