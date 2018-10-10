@@ -2,5 +2,6 @@ export default {
     article: '',
     selectedWord: '',
     actions: [],
-    synonyms: []
+    synonyms: [],
+    modalOpen: false
 }

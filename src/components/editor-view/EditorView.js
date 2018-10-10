@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import {fetchData, saveArticle} from '../../store/article/actions';
+import {closeModal} from '../../store/modal/actions'
 import {setSelectedWord, replaceSelectedWord} from '../../store/selected/actions'
 import {setActions} from '../../store/actions/actions'
 import Button from '../button/Button';
@@ -120,12 +121,12 @@ class EditorView extends Component {
     }
 
     _handleSynonymSelection(value) {
-        this.setState({modalIsOpen: false});
+        this._handleCloseModal()
         this.props.replaceSelectedWord(value);
     }
 
     _handleCloseModal() {
-        this.setState({modalIsOpen: false});
+        this.props.closeModal();
     }
 
     _renderArticle() {
@@ -175,7 +176,7 @@ class EditorView extends Component {
                 />
                 <Dialog
                     contentStyle={modalStyles.synonymsContent}
-                    open={this.state.modalIsOpen}
+                    open={this.props.modalOpen}
                     onClose={this._handleCloseModal}
                 >
                     <DialogTitle>Synonyms</DialogTitle>
@@ -191,14 +192,14 @@ class EditorView extends Component {
 
 EditorView.propTypes = {
     fetchData: PropTypes.func.isRequired,
-    article: PropTypes.string.isRequired,
+    article: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
     actions: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
-    const {article, actions, selected} = state;
+    const {article, actions, selected, modalOpen} = state;
 
-    return {article, actions, selected}
+    return {article, actions, selected, modalOpen}
 }
 
 function mapDispatchToProps(dispatch) {
@@ -207,7 +208,8 @@ function mapDispatchToProps(dispatch) {
         setSelectedWord: (wordNode) => dispatch(setSelectedWord(wordNode)),
         setActions: (selectedNode) => dispatch(setActions(selectedNode)),
         saveArticle: (articleNode) => dispatch(saveArticle(articleNode)),
-        replaceSelectedWord: (word) => dispatch(replaceSelectedWord(word))
+        replaceSelectedWord: (word) => dispatch(replaceSelectedWord(word)),
+        closeModal: () => dispatch(closeModal())
     }
 }
 
