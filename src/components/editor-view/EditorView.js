@@ -14,13 +14,6 @@ import SynonymModal from '../modal/SynonymModal';
 import {Actions, stylesMapToAction, stylesMapToValue} from '../../config/constants'
 import './EditorView.css';
 
-const modalStyles = {
-    synonymsContent: {
-        top: '70%',
-        width: '60%',
-    }
-}
-
 class EditorView extends Component {
     constructor(props, context) {
         super(props, context);
@@ -168,7 +161,6 @@ class EditorView extends Component {
                     disabled={false}
                 />
                 <Dialog
-                    contentStyle={modalStyles.synonymsContent}
                     open={this.props.modalOpen}
                     onClose={this._handleCloseModal}
                 >
