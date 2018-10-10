@@ -47,8 +47,8 @@ class TopPanel extends Component {
                     )
                 })}
                 <Button
-                    title="Synonyms"
-                    name='synonyms'
+                    title="Get synonyms"
+                    name="synonyms"
                     disabled={!this.props.selectedWord}
                     onClick={this._handleAction}
                 />
@@ -68,7 +68,7 @@ function mapDispatchToProps(dispatch) {
     return {
         updateActions: action => dispatch(updateActions(action)),
         showModal: action => dispatch(showModal(action))
-    };
+    }
 }
 
 export default connect(

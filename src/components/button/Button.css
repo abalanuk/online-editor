@@ -1,6 +1,9 @@
 .Button {
-    width: 20vh;
-    height: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3vh;
+    max-height: 5vh;
     margin-right: 3vh;
     background-color: burlywood;
     outline: none;

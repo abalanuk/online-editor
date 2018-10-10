@@ -25,10 +25,6 @@ class EditorView extends Component {
     constructor(props, context) {
         super(props, context);
 
-        this.state = {
-            modalIsOpen: false
-        }
-
         this._doubleClickHandler = this._doubleClickHandler.bind(this);
         this._renderArticle = this._renderArticle.bind(this);
         this._handleSaveArticle = this._handleSaveArticle.bind(this);
@@ -113,9 +109,6 @@ class EditorView extends Component {
 
         this.selectedWordRef = event.target;
 
-        //show synonyms dialog
-        this.setState({modalIsOpen: true});
-
         this.props.setActions(event.target);
         this.props.setSelectedWord(event.target);
     }
@@ -179,7 +172,7 @@ class EditorView extends Component {
                     open={this.props.modalOpen}
                     onClose={this._handleCloseModal}
                 >
-                    <DialogTitle>Synonyms</DialogTitle>
+                    <DialogTitle>Synonyms of ${this.props.selected.innerText}</DialogTitle>
                     <SynonymModal
                         onSelect={this._handleSynonymSelection}
                         onClose={this._handleCloseModal}
