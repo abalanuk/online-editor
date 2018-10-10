@@ -9,3 +9,5 @@
 [-] Add left-side bar of created/edited/saved articles
 
 [-] Add some more useful features like modern online editors have...
+
+[-] Add more feedback for user while applying different actions
