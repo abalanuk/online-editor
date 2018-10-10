@@ -18,7 +18,7 @@ class EditorView extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            saveButtonTiltle: "Save"
+            saveButtonTitle: "Save"
         }
 
         this._doubleClickHandler = this._doubleClickHandler.bind(this);
@@ -87,8 +87,8 @@ class EditorView extends Component {
         event.stopPropagation();
 
         const wordsWithStyles = this._getWordsWithStyles();
-        this.setState({saveButtonTiltle: 'Saving...'});
-        setTimeout(() => this.setState({saveButtonTiltle: 'Save'}), 2000);
+        this.setState({saveButtonTitle: 'Saving...'});
+        setTimeout(() => this.setState({saveButtonTitle: 'Save'}), 2000);
 
         this.props.saveArticle(wordsWithStyles)
     }
