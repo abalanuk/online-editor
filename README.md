@@ -9,6 +9,6 @@ Run `npm start` for a dev server.
 
 ## Notes
 + Text sample is given in `mockAPI.js`
-+ Given files structure is not obligatory and could be changed
-
-
++ By clicking Save button we can save edited article to localStorage
++ By click on Get synonyms we can request/get possible synonyms for selected word
+and replace it by any synonym if necessary

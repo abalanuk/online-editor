@@ -172,7 +172,7 @@ class EditorView extends Component {
                     open={this.props.modalOpen}
                     onClose={this._handleCloseModal}
                 >
-                    <DialogTitle>Synonyms of ${this.props.selected.innerText}</DialogTitle>
+                    <DialogTitle>{`Synonyms of "${this.props.selected.innerText}"`}</DialogTitle>
                     <SynonymModal
                         onSelect={this._handleSynonymSelection}
                         onClose={this._handleCloseModal}

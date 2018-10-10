@@ -46,7 +46,12 @@ class SynonymModal extends Component {
         return synonyms.length ?
             this.props.synonyms.map(syn => {
                 return (
-                    <ListItem button onClick={this._handleSynonymSelection.bind(this, syn.word)} key={syn.word}>
+                    <ListItem
+                        button
+                        divider
+                        onClick={this._handleSynonymSelection.bind(this, syn.word)}
+                        key={syn.word}
+                    >
                         <ListItemText primary={syn.word} />
                     </ListItem>
                 )
@@ -57,7 +62,7 @@ class SynonymModal extends Component {
     render() {
         return (
             <div className="ModalContainer">
-                <List>
+                <List padding>
                     {this._getContent()}
                 </List>
                 <DialogActions>
