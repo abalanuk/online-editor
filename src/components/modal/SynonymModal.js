@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '../button/Button'
 
 import {getSynonyms} from '../../store/synonyms/actions';
 import './SynonymModal.css'
@@ -26,7 +28,6 @@ class SynonymModal extends Component {
         }
     }
 
-
     componentDidMount() {
         const clearWord = this.props.selectedWord.innerText.replace(/[,.\s]+/g, '');
         this.props.getSynonyms(clearWord.toLowerCase());
@@ -36,7 +37,7 @@ class SynonymModal extends Component {
         event.preventDefault();
         event.stopPropagation();
 
-        this.props.onClose(value);
+        this.props.onSelect(value);
     }
 
     _getContent() {
@@ -59,6 +60,14 @@ class SynonymModal extends Component {
                 <List>
                     {this._getContent()}
                 </List>
+                <DialogActions>
+                    <Button
+                        onClick={this.props.onClose}
+                        title="Close"
+                        name='close'
+                        disabled={false}
+                    />
+                </DialogActions>
             </div>
         );
     }

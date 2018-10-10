@@ -31,7 +31,9 @@ class EditorView extends Component {
         this._doubleClickHandler = this._doubleClickHandler.bind(this);
         this._renderArticle = this._renderArticle.bind(this);
         this._handleSaveArticle = this._handleSaveArticle.bind(this);
-        this._handleCloseDialog = this._handleCloseDialog.bind(this);
+
+        this._handleSynonymSelection = this._handleSynonymSelection.bind(this);
+        this._handleCloseModal = this._handleCloseModal.bind(this);
 
         this._getNodeStyles = this._getNodeStyles.bind(this);
         this._getArticleRef = ref => this.articleRef = ref;
@@ -117,9 +119,13 @@ class EditorView extends Component {
         this.props.setSelectedWord(event.target);
     }
 
-    _handleCloseDialog(value) {
+    _handleSynonymSelection(value) {
         this.setState({modalIsOpen: false});
         this.props.replaceSelectedWord(value);
+    }
+
+    _handleCloseModal() {
+        this.setState({modalIsOpen: false});
     }
 
     _renderArticle() {
@@ -170,9 +176,13 @@ class EditorView extends Component {
                 <Dialog
                     contentStyle={modalStyles.synonymsContent}
                     open={this.state.modalIsOpen}
+                    onClose={this._handleCloseModal}
                 >
                     <DialogTitle>Synonyms</DialogTitle>
-                    <SynonymModal onClose={this._handleCloseDialog}/>
+                    <SynonymModal
+                        onSelect={this._handleSynonymSelection}
+                        onClose={this._handleCloseModal}
+                    />
                 </Dialog>
             </div>
         );
