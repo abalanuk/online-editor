@@ -160,7 +160,7 @@ class EditorView extends Component {
                     {this._renderArticle()}
                 </section>
                 <Button
-                    title={this.state.saveButtonTiltle}
+                    title={this.state.saveButtonTitle}
                     onClick={this._handleSaveArticle}
                     name='save'
                     disabled={false}
