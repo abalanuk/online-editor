@@ -43,7 +43,7 @@ class EditorView extends Component {
         this.props.fetchData();
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps, nextContext) {
         if(nextProps.actions && nextProps.actions !== this.props.actions) {
             const {style} = this.selectedWordRef
             const absentActions = Actions.filter(item => !nextProps.actions.find(action => action === item))

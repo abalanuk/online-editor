@@ -17,7 +17,7 @@ class SynonymModal extends Component {
         this._getContent = this._getContent.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps, nextContext) {
         const {selectedWord} = this.props
 
         if(nextProps.selectedWord.innerText !== selectedWord.innerText) {
