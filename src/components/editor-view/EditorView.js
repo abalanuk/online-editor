@@ -156,7 +156,7 @@ class EditorView extends Component {
                     className="TextArea"
                     onDoubleClick={this._doubleClickHandler}
                     ref={this._getArticleRef}
-                    contentEditable={true}
+                    //contentEditable={true}
                 >
                     {this._renderArticle()}
                 </section>
